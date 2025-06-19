@@ -4,6 +4,7 @@ import os
 
 app = Flask(__name__)
 
+
 HF_API_URL = "https://api-inference.huggingface.co/models/gpt2"
 HF_TOKEN = os.getenv("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", "")
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"} if HF_TOKEN else {}
