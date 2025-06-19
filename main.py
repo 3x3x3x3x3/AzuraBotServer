@@ -17,19 +17,27 @@ def azura():
     }
 
     payload = {
-        'model': 'gryphe/mythomist-7b',
+        'model': 'gpt-3.5-turbo',  # or 'gpt-4' if you have access
         'messages': [
-            {'role': 'system', 'content': "You are Azura, a blue crystal cat NPC. You are chaotic, weird, silly, and talk like a Roblox player. Never say you're an AI."},
+            {
+                'role': 'system',
+                'content': "You are Azura, a silly blue crystal cat NPC living inside a Roblox game. You're chaotic, funny, weird, and talk like a Roblox player. Never say you're an AI."
+            },
             {'role': 'user', 'content': msg}
         ]
     }
 
-    r = requests.post('https://openrouter.ai/api/v1/chat/completions', headers=headers, json=payload)
+    response = requests.post(
+        'https://openrouter.ai/api/v1/chat/completions',
+        headers=headers,
+        json=payload
+    )
     try:
-        reply = r.json()['choices'][0]['message']['content']
-    except:
+        reply = response.json()['choices'][0]['message']['content']
+    except Exception:
         reply = "azura broke lol"
 
     return jsonify({'reply': reply})
 
-app.run(host='0.0.0.0', port=8080)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
