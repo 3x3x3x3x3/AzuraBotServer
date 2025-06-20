@@ -18,7 +18,7 @@ def chat():
         }
 
         payload = {
-            "model": "openrouter/phi-2",  
+            "model": "openrouter/meta-llama-3-8b-instruct",
             "messages": [
                 {"role": "system", "content": "You are Azura, a crystal cat who is very helpful and silly."},
                 {"role": "user", "content": prompt}
