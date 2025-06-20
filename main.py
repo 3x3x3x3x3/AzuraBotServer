@@ -16,9 +16,8 @@ def chat():
     data = request.json
     if not data:
         return jsonify({"error": "Invalid JSON body"}), 400
-
     prompt = data.get("prompt", "")
-    if not prompt or not isinstance(prompt, str) or prompt.strip() == "":
+    if not isinstance(prompt, str) or prompt.strip() == "":
         return jsonify({"error": "Missing or empty 'prompt' field"}), 400
 
     headers = {
@@ -36,13 +35,13 @@ def chat():
 
     try:
         res = requests.post(API_URL, json=payload, headers=headers, timeout=15)
+
         if res.status_code == 400:
             try:
-                error_json = res.json()
-                message = error_json.get("error", {}).get("message", "Bad Request")
+                err_msg = res.json().get("error", {}).get("message", "Bad Request")
             except Exception:
-                message = "Bad Request"
-            return jsonify({"error": f"OpenRouter API error: {message}"}), 400
+                err_msg = "Bad Request"
+            return jsonify({"error": f"OpenRouter API error: {err_msg}"}), 400
 
         res.raise_for_status()
 
@@ -51,27 +50,21 @@ def chat():
 
     except requests.exceptions.Timeout:
         return jsonify({"error": "OpenRouter API request timed out"}), 504
-
     except requests.exceptions.ConnectionError:
         return jsonify({"error": "Failed to connect to OpenRouter API"}), 502
-
     except requests.exceptions.HTTPError as e:
         return jsonify({"error": f"OpenRouter API HTTP error: {str(e)}"}), res.status_code
-
     except Exception:
         traceback.print_exc()
         return jsonify({"error": "Internal server error"}), 500
-
 
 @app.route("/", methods=["GET"])
 def index():
     return "AI backend is running", 200
 
-
-@app.route('/favicon.ico')
+@app.route("/favicon.ico")
 def favicon():
     return "", 204
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
