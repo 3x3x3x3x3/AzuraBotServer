@@ -12,7 +12,6 @@ API_URL = "https://openrouter.ai/api/v1/chat/completions"
 def chat():
     if not OPENROUTER_API_KEY:
         return jsonify({"error": "Server misconfiguration: missing OPENROUTER_API_KEY"}), 500
-
     data = request.json
     if not data:
         return jsonify({"error": "Invalid JSON body"}), 400
